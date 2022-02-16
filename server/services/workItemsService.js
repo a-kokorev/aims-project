@@ -24,6 +24,12 @@ module.exports.getWorkItemsInfo = () => {
     .catch(error => console.log(error));
 };
 
+module.exports.getWorkItemById = id => {
+  // TODO: Add ID check
+  return requestService.get(urlBuilder.workItemUrl(id))
+    .then(response => response.data);
+};
+
 module.exports.getWorkItemRelations = workItemsInfo => {
   const filterTag = inquireService.getFilterTag();
   const query =

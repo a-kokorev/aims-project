@@ -1,27 +1,21 @@
-const chalk = require('chalk');
-const clear = require('clear');
-const figlet = require('figlet');
-const printTree = require('print-tree');
-const treeBuilder = require('./utils/treeBuilder');
-const inquireService = require('./services/inquireService');
+const express = require('express');
 const workItemsService = require('./services/workItemsService');
 
-clear();
+const server = express();
+const port = 3000;
 
-console.log(chalk.yellow(figlet.textSync('Aims Project', { horizontalLayout: 'full' })));
+server.get('/work-items', (_, res) => {
+  workItemsService.getWorkItemsInfo()
+    .then(workItemsInfo => res.json(workItemsInfo))
+    .catch(error => res.send(error));
+});
 
-const displayData = workItemsTree => {
-  for (const tree of workItemsTree) {
-    printTree(tree, node => `${node.id} _ ${node.title}`, node => node.children);
-  }
-}
+server.get('/work-items/:workItemId', (req, res) => {
+  workItemsService.getWorkItemById(req.params.workItemId)
+    .then(workItemInfo => res.json(workItemInfo))
+    .catch(error => res.send(error));
+});
 
-const run = () => {
-  inquireService.askAzureDevopsToken()
-    .then(() => workItemsService.getWorkItemsInfo())
-    .then(workItemsInfo => workItemsService.getWorkItemRelations(workItemsInfo))
-    .then(workItemsRelations => treeBuilder.buildTree(workItemsRelations))
-    .then(workItemsTree => displayData(workItemsTree));
-};
-
-run();
+server.listen(port, () => {
+  console.log(`Server app is listening on port ${port}`);
+});
