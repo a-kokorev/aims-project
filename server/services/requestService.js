@@ -4,7 +4,6 @@ const inquireService = require('./inquireService');
 const axiosConfig = token => ({
   headers: {
     'Accept': 'application/json',
-    'Content-Type': 'application/json-patch+json',
     'Authorization': `Basic ${Buffer.from(`:${token}`).toString('base64')}`,
   },
 });
