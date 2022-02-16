@@ -1,6 +1,7 @@
 const urlBuilder = require('../utils/urlBuilder');
 const requestService = require('./requestService');
 const inquireService = require('./inquireService');
+const dataTransformers = require('../utils/dataTransformers');
 
 module.exports.getWorkItemsInfo = () => {
   const filterTag = inquireService.getFilterTag();
@@ -19,7 +20,9 @@ module.exports.getWorkItemsInfo = () => {
         workItems.map(workItem => requestService.get(urlBuilder.workItemUrl(workItem.id)))
       )
     )
-    .then(responseArray => responseArray.map(response => response.data))
+    .then(responseArray =>
+      responseArray.map(response => dataTransformers.transformWorkItem(response.data))
+    )
     .then(workItemsInfo => workItemsInfo)
     .catch(error => console.log(error));
 };
@@ -27,7 +30,7 @@ module.exports.getWorkItemsInfo = () => {
 module.exports.getWorkItemById = id => {
   // TODO: Add ID check
   return requestService.get(urlBuilder.workItemUrl(id))
-    .then(response => response.data);
+    .then(response => dataTransformers.transformWorkItem(response.data));
 };
 
 module.exports.getWorkItemRelations = workItemsInfo => {
