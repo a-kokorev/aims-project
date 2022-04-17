@@ -1,0 +1,9 @@
+<ng-container *ngIf="workItems$ | async as workItems; else loadingMessage">
+  <div *ngFor="let workItem of workItems">
+    {{ workItem.title }}
+  </div>
+</ng-container>
+
+<ng-template #loadingMessage>
+  <div>Loading, please wait...</div>
+</ng-template>
