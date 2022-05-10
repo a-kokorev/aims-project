@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 import { WorkItem } from "src/models/WorkItem";
 import { WorkItemsService } from "src/services/workItems.service";
@@ -10,6 +10,7 @@ import { WorkItemsService } from "src/services/workItems.service";
 })
 export class HomePage implements OnInit {
   public workItems$!: Observable<WorkItem[]>;
+  public displayedColumns: string[] = ['id', 'type', 'title', 'state'];
 
   constructor(private workItemsService: WorkItemsService) {}
 
